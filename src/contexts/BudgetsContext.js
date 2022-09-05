@@ -30,8 +30,13 @@ export const BudgetsProvider = ({ children }) => {
       return [...prevBudgets, { id: uuidV4(), name, max }];
     });
   }
-  function deleteBudge({ id }) {
-    // TODO: Deal with expenses
+  function deleteBudget({ id }) {
+    setExpenses((prevExpenses) => {
+      return prevExpenses.map((expense) => {
+        if (expense.budgetId !== id) return expense;
+        return { ...expense, budgetId: UNCATEGORIZED_BUDGET_ID };
+      });
+    });
     setBudgets((prevBudgets) => {
       return prevBudgets.filter((budget) => budget.id !== id);
     });
@@ -49,7 +54,7 @@ export const BudgetsProvider = ({ children }) => {
         getBudgetExpenses,
         addExpense,
         addBudget,
-        deleteBudge,
+        deleteBudget,
         deleteExpense,
       }}
     >
